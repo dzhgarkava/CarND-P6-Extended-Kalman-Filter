@@ -4,7 +4,7 @@
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-// Please note that the Eigen library does not initialize 
+// Please note that the Eigen library does not initialize
 // VectorXd or MatrixXd objects with zeros upon creation.
 
 KalmanFilter::KalmanFilter() {}
@@ -12,7 +12,8 @@ KalmanFilter::KalmanFilter() {}
 KalmanFilter::~KalmanFilter() {}
 
 void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
-                        MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) {
+                        MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in)
+{
   x_ = x_in;
   P_ = P_in;
   F_ = F_in;
@@ -22,18 +23,15 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 
 }
 
-void KalmanFilter::Predict() {
-  /**
-  TODO:
-    * predict the state
-  */
+void KalmanFilter::Predict()
+{
     x_ = F_ * x_;
     MatrixXd Ft = F_.transpose();
     P_ = F_ * P_ * Ft + Q_;
 }
 
-void KalmanFilter::UpdateLidar(const VectorXd &z) {
-
+void KalmanFilter::UpdateLidar(const VectorXd &z)
+{
     // Update the state by using Kalman Filter equations
     VectorXd z_pred = H_ * x_;
     VectorXd y = z - z_pred;
@@ -43,15 +41,15 @@ void KalmanFilter::UpdateLidar(const VectorXd &z) {
     MatrixXd PHt = P_ * Ht;
     MatrixXd K = PHt * Si;
 
-    //new estimate
+    // New estimate
     x_ = x_ + (K * y);
     long x_size = x_.size();
     MatrixXd I = MatrixXd::Identity(x_size, x_size);
     P_ = (I - K * H_) * P_;
 }
 
-void KalmanFilter::UpdateRadar(const VectorXd &z) {
-
+void KalmanFilter::UpdateRadar(const VectorXd &z)
+{
     // Update the state by using Extended Kalman Filter equations
 
     // Convert to polar coordinates
@@ -63,9 +61,12 @@ void KalmanFilter::UpdateRadar(const VectorXd &z) {
     float rho = sqrt(px * px + py * py);
     float phi = atan2(py, px);
     float rho_dot;
-    if (fabs(rho) < 0.0001) {
+    if (fabs(rho) < 0.0001)
+    {
         rho_dot = 0;
-    } else {
+    }
+    else
+    {
         rho_dot = (px * vx + py * vy) / rho;
     }
 
@@ -74,8 +75,8 @@ void KalmanFilter::UpdateRadar(const VectorXd &z) {
 
     VectorXd y = z - z_pred;
 
-    // normalize the angle of z-z_pred
-    // if phi is not in the range (-pi, pi), put it in that range
+    // Normalize the angle of z-z_pred
+    // If phi is not in the range (-pi, pi), put it in that range
     if (y(1) > M_PI)
     {
         y(1) = y(1) - 2*M_PI;
@@ -91,7 +92,7 @@ void KalmanFilter::UpdateRadar(const VectorXd &z) {
     MatrixXd PHt = P_ * Ht;
     MatrixXd K = PHt * Si;
 
-    //new estimate
+    // New estimate
     x_ = x_ + (K * y);
     long x_size = x_.size();
     MatrixXd I = MatrixXd::Identity(x_size, x_size);
