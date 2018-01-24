@@ -1101,6 +1101,8 @@ vector
 /Users/dzhgarkava/Documents/Udacity/SelfDrivingCar/Term2/CarND-P6-Extended-Kalman-Filter/src/kalman_filter.cpp
 kalman_filter.h
 /Users/dzhgarkava/Documents/Udacity/SelfDrivingCar/Term2/CarND-P6-Extended-Kalman-Filter/src/kalman_filter.h
+cmath
+-
 
 /Users/dzhgarkava/Documents/Udacity/SelfDrivingCar/Term2/CarND-P6-Extended-Kalman-Filter/src/kalman_filter.h
 Eigen/Dense
